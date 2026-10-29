@@ -56,11 +56,16 @@ and the plan lifecycle has a compact example in [PLAN-FILES.md](PLAN-FILES.md).
 The active dogfooding state is in [NOW](convo/head.md).
 
 The implemented core composes typed Markdown sections and complete physical
-bundles from explicit source declarations and includes. Builds protect managed
-`AGENTS.md` and selected `.agents/skills` outputs; `status` and `drift` inspect
-output state and saved upstream source fingerprints. Localizing a selected
+bundles from explicit source declarations and includes. After a successful build
+establishes state, `status` and `drift` inspect output state and saved upstream
+source fingerprints. Localizing a selected
 physical input makes one editable project-local copy without later automatic
 recopying.
+
+**Known adoption safety gap:** a 2026-10-29 disposable walkthrough showed a
+fresh native `build` overwriting a pre-existing unmanaged `AGENTS.md`. Do not
+claim safe existing-repository adoption or run that write path against a real
+unmanaged repository until it has an explicit refusal/adoption design.
 
 Richer curation/relationship CLI workflows, provenance reconciliation,
 interactive UI work, global targets, and reverse inference remain future work.

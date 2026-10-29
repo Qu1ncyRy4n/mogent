@@ -83,13 +83,18 @@ Current support:
 
 - `status`, `drift`, `show tree`, and `build --check` inspect managed output
   state without rewriting it.
-- Builds protect managed outputs against direct drift; generated builds resist
-  hand edits.
+- After a successful Mogent build establishes `.mogent/state.json`,
+  `build --check` and `drift` detect direct output drift; generated builds also
+  resist hand edits.
 
 Acceptance status:
 
-- [x] Generated-build and output-drift protection have executable coverage
-  (`tools/native-stories`: US-4/US-6).
+- [x] Generated-build and post-build output-drift detection have executable
+  coverage (`tools/native-stories`: US-4/US-6).
+- [ ] **Safety failure found 2026-10-29:** a native `build` in a fresh project
+  overwrote a pre-existing, unmanaged `AGENTS.md` without an adoption prompt,
+  preview gate, or refusal. The disposable walkthrough preserved no user data,
+  but this blocks the story’s safe-adoption claim.
 - [ ] Read-only capture/inventory of root, nested, role-specific guidance,
   `CLAUDE.md`, and existing skill trees is not implemented.
 - [ ] Rule classification, duplicate/conflict detection, provenance-preserving

@@ -80,7 +80,11 @@ Install the current checkout from the Mogent repository:
 ```
 
 Before allowing Mogent to write in the target, check its Git state and inspect
-any existing `AGENTS.md`. Do not use `--force` in the real project merely to get
+any existing `AGENTS.md`. **Do not run native `mogent build` in a repository
+with unmanaged output yet:** the 2026-10-29 disposable walkthrough found that a
+fresh native project overwrites an existing unmanaged `AGENTS.md` without a
+refusal or adoption step. Until that is fixed, use `show tree`, `show issues`,
+and a disposable copy only. Do not use `--force` in a real project merely to get
 past an unexpected status:
 
 ```sh
