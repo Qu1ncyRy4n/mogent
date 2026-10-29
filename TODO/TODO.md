@@ -7,6 +7,7 @@
 | jusuk | Mogent: Modular Agent Prompt Manager | [open](TODO-jusuk-mogent-agent-modules.md) |
 | pupab | HCL v2 rollout: offer vocabulary, plan/apply, commit pinning | [active](TODO-pupab-hcl-v2-rollout.md) |
 | tugur | HCL v2 composition follow-up: curate, selection, tree overlays | [active](TODO-tugur-v2-composition-followup.md) |
+| kozuj | Native adoption safety and invalid-selection recovery | [ready](TODO-kozuj-native-adoption-safety.md) |
 | pickup-2026-09-04-agents-library-dogfood | Current agents-library dogfood checkpoint | [active](PICKUP-2026-09-04-agents-library-dogfood.md) |
 | pickup-2026-08-25-libv2-intake | Historical libv2 intake checkpoint | [historical](archive/PICKUP-2026-08-25-libv2-intake.md) |
 | pickup-2026-08-05-library-split | Historical library split checkpoint | [historical](archive/PICKUP-2026-08-05-library-split.md) |
@@ -42,6 +43,12 @@ record of delivered behavior.
 
 Initial output placement is root `AGENTS.md` and other managed artifacts under
 `.agents/`, using real files. Skip a `copy` alias. Deferred follow-up:
+
+- [ ] [ready] **kozuj — Native adoption safety and invalid-selection recovery:**
+  the 2026-10-29 disposable walkthrough found that a fresh native `build`
+  overwrites a pre-existing unmanaged `AGENTS.md`, and an invalid direct
+  directory include cannot be removed because `module remove` composes before
+  editing. See [TODO-kozuj-native-adoption-safety.md](TODO-kozuj-native-adoption-safety.md).
 
 - [ ] Define optional per-file protocol/target-profile headers for destination
   and format defaults (illustrative `protocol = "dotagents"` / `"openai"`).

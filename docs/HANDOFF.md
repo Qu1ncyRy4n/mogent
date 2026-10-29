@@ -65,7 +65,8 @@ recopying.
 **Known adoption safety gap:** a 2026-10-29 disposable walkthrough showed a
 fresh native `build` overwriting a pre-existing unmanaged `AGENTS.md`. Do not
 claim safe existing-repository adoption or run that write path against a real
-unmanaged repository until it has an explicit refusal/adoption design.
+unmanaged repository until [TODO-kozuj](../TODO/TODO-kozuj-native-adoption-safety.md)
+has an explicit refusal/adoption design and verification.
 
 Richer curation/relationship CLI workflows, provenance reconciliation,
 interactive UI work, global targets, and reverse inference remain future work.
