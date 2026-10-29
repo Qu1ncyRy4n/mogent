@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+# Run executable evidence for the supported portions of Mogent's current user
+# stories. Each named Go test uses an isolated temporary project fixture.
+#
+#   tools/native-stories
+#
+# This intentionally does not claim that US-3, US-5, US-7, or US-8 are
+# implemented, nor that US-2/US-4's still-manual adoption work is complete.
+set -eu
+
+repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$repo"
+
+export CGO_ENABLED="${CGO_ENABLED:-0}"
+export GOCACHE="${GOCACHE:-/tmp/mogent-gocache}"
+export GOMODCACHE="${GOMODCACHE:-/tmp/mogent-gopath/pkg/mod}"
+
+echo "US-1: native plan -> generated build -> managed outputs"
+go test ./internal/cli -count=1 -run '^TestNewSequenceBuildShowWorkflow$'
+
+echo "US-2: localize selected content; report upstream module changes"
+go test ./internal/cli -count=1 -run '^(TestModuleLocalize|TestNativeDriftReportsUpstreamModuleChanges)$'
+
+echo "US-4/US-6: protect generated inputs and verify output drift"
+go test ./internal/cli -count=1 -run '^(TestNewBuildProtectsEditedGeneratedFileAndShowsIssues|TestNativeDriftUsesStateAndCurrentComposition)$'
+
+echo "native-stories: supported scenarios passed"

@@ -1,41 +1,48 @@
 # CIWG / PromiseGrid Consolidation User Story
 
-## Consolidate agents and skills across PromiseGrid and CIWG repositories
+## Consolidate agents and skills across CIWG and PromiseGrid repositories
 
-**As a** PromiseGrid/CIWG maintainer, **I want** the duplicated agent guidance
-and skills currently copy-pasted across `promisegrid/wire-lab`,
-`promisegrid/grid-poc`, `ciwg/grid-examples`, `ciwg/mob-sandbox`,
-`ciwg/decomk-conf-cswg`, and their sibling repos consolidated into one
-versioned, composable library **so that** a shared rule is authored once, fixed
-once, and every repo renders the same `AGENTS.md`/skill set from an
-`agents.yaml` manifest instead of drifting apart.
+**As a** CIWG/PromiseGrid maintainer, **I want** duplicated guidance and skills
+across the related repositories consolidated into a versioned, composable
+library, **so that** a shared rule is authored and corrected once while each
+repository explicitly chooses its own composition.
 
-### Scope
+This is a curation/adoption story, not a claim that current Mogent can perform
+the migration automatically. It uses the native project model: a repository
+owns `mogent.build`, or owns `mogent.plan` plus its generated `mogent.build`;
+`source` declarations connect libraries and ordered `include` declarations
+select content.
 
-- **ciwg org** (https://github.com/ciwg): `grid-examples`, `cswg`,
-  `mob-sandbox`, `decomk-conf-cswg`, `FAB26-Presentation`,
-  `promisegrid-dev-guide`, plus the workshop template chain.
-- **PromiseGrid org**: `wire-lab`, `grid-poc`, `promisegrid`, and Steve's
-  `stevegt/*` repos.
-- Existing local captures in `docs/other_repo_agents/` already show the
-  duplication: `wire-lab` and `grid-examples` both carry near-identical
-  *Agent Instruction Architecture*, *Promise Action Minimalism*, *POC Superset
-  Discipline*, *Decision-First*, and *Thought Experiment Protocol* sections.
+## Scope
 
-### Acceptance Criteria
+- **CIWG:** `grid-examples`, `cswg`, `mob-sandbox`, `decomk-conf-cswg`,
+  `FAB26-Presentation`, `promisegrid-dev-guide`, and their template chain.
+- **PromiseGrid:** `wire-lab`, `grid-poc`, `promisegrid`, and relevant
+  `stevegt/*` repositories.
+- Existing captures in `docs/other_repo_agents/` are evidence for review, not
+  authoritative input to overwrite back into their source repositories.
 
-- One inventory classifies each captured section/skill as universal,
-  org-universal, project-specific, or person/machine-specific
-  (`docs/library-curation/open-questions.md:7-9`).
-- Shared modules are extracted (e.g. `agents/decision-first.md`,
-  `agents/diff-discipline.md`, `guides/promisegrid/promise-action-minimalism.md`,
-  `skills/promisegrid-poc/`) with provenance back to the originating repo and
-  commit.
-- Each source repo gets a manifest selecting those modules and renders an
-  `AGENTS.md` that matches its current one modulo intentional edits, proven by
-  `mogent build --dry-run` (v1 `agents.yaml`) or `mogent plan` (v2
-  `mogent.hcl`).
-- Divergences between repos are surfaced as conflicts for review, not silently
-  normalized, and historical DI/TE/DR handles remain resolvable.
-- Adding a new CIWG repo requires only a manifest, not a fresh copy of the
-  protocols.
+## Acceptance criteria and present status
+
+- [ ] Produce one reviewed inventory classifying captured sections and skills as
+  universal, organization-wide, project-specific, or person/machine-specific.
+  The curation question is recorded in
+  [library-curation/open-questions.md](library-curation/open-questions.md).
+- [ ] Extract approved shared modules and physical skill bundles into a library,
+  preserving source repository and revision provenance.
+- [ ] For each pilot repository, author a native `mogent.plan` or
+  `mogent.build`, preview it with `mogent show tree` and `mogent build --check`,
+  then build only with owner approval. Compare resulting output with the
+  repository’s existing guidance and record intentional differences.
+- [ ] Surface divergence as reviewable differences; do not normalize or replace
+  a repository’s existing policy silently.
+- [ ] Add a new participating repository by connecting the approved source and
+  making explicit includes, rather than copying protocol text.
+
+## Prerequisites and boundaries
+
+The read-only capture/import/classification features in US-4 are not implemented,
+so the first inventory remains curator-led. Likewise, policy non-relaxation and
+organization audit required by US-8 are future work. Do not use this story to
+modify an external repository or publish a library without the relevant owner
+approval.

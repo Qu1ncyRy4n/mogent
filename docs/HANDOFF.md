@@ -22,6 +22,11 @@ change/add/remove simulation confirms that `drift` identifies changed, added,
 and removed upstream module paths as well as output state. [NOW](convo/head.md)
 owns the remaining command-vocabulary review.
 
+The current user-story record is [user-stories.md](user-stories.md). Its
+supported fixture scenarios run with `tools/native-stories`; the CIWG/
+PromiseGrid curation story is separately scoped in
+[user-stories-ciwg.md](user-stories-ciwg.md).
+
 ## Sources of Authority
 
 - [`convo/head.md`](convo/head.md) owns the live conversation resume point;

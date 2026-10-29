@@ -6,25 +6,25 @@ Do not work around a failure by editing generated `AGENTS.md` unless the stage
 specifically tests drift handling.
 
 > [!IMPORTANT]
-> Stages -1 through 8 below are the historical v1 runbook. They assume the
-> removed `Agents/libraries/` tree and must not be run unchanged. The current
-> end-to-end dogfood procedure is the HCL v2 flow against the sibling QMR
-> library: `tools/v2-stories` runs the acceptance scenarios from
-> `docs/proposals/MOGENT-HCL-V2-SPEC.md` (new repository, adopt an existing
-> repository, update a working repository, share a library) in disposable
-> directories and fails on the first assertion that does not hold. Run it
-> after any v2 change; add a scenario there before adding a stage here.
+> Stages -1 through 8 below are historical and must not be run unchanged. They
+> assume the removed `Agents/libraries/` tree. The HCL-v2 `tools/v2-stories`
+> script is historical too; it invokes retired `mogent.hcl`, `plan`, and `apply`
+> commands. For executable current-story coverage, run `tools/native-stories`.
+> It exercises supported US-1, US-2, US-4, and US-6 behaviors in disposable Go
+> test fixtures. Real-repository dogfooding remains necessary for the usability
+> and curation portions that fixtures cannot establish.
 
 For only the newly implemented directory-tree, unified-coverage, alignment,
 and display-character work, start with
 [`dogfood/history/DOGFOOD-SESSION-3.md`](dogfood/history/DOGFOOD-SESSION-3.md). The longer staged guide below
 also includes older regression exercises.
 
-## Current QMR Template Smoke
+## Historical QMR Template Smoke
 
-This is the current bounded dogfood workflow for the sibling QMR personal
-library. It creates a disposable manifest that selects QMR's current live
-core-and-constraints modules; it does not select archive or reference content.
+This retained workflow predates the native plan/build interface and is not a
+current command recipe. It creates a disposable manifest that selects QMR's
+then-live core-and-constraints modules; it does not select archive or reference
+content.
 
 ```sh
 qmr_library=/path/to/qmr-agents-library

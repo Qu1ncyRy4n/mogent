@@ -1,123 +1,144 @@
 # Mogent User Stories
 
-The working set of user stories for Mogent, in rough priority order. Core
-stories (US-1..US-4) drive near-term direction; review-later stories
-(US-5..US-8) are documented but not scheduled. The CIWG/PromiseGrid
-consolidation story lives separately in
-[`user-stories-ciwg.md`](user-stories-ciwg.md).
+These stories describe the product jobs, not a promise that every acceptance
+criterion is implemented. The supported project model is an authored
+`mogent.build` or an intent-first `mogent.plan` sequenced into `mogent.build`.
+Sources make libraries available; ordered `include` declarations select content.
 
-Each story carries short scope notes capturing the criticisms and refinements
-raised during review, so the framing is not lost.
-
----
+`tools/native-stories` runs the current executable evidence for the supported
+parts of US-1, US-2, US-4, and US-6 in isolated Go test fixtures. It is not a
+substitute for real-repository dogfooding, and it does not claim unimplemented
+criteria have passed.
 
 ## Core stories
 
-### US-1 — Shared core template for personal and professional use
+### US-1 — Shared core for personal and professional use
 
-**As** someone setting up agent guidance for both personal and professional
-projects, **I want** a small core template that both can share, with the option
-of context templates that share most but not all modules, **so that** I get a
-useful `AGENTS.md` quickly without learning the full model.
+**As** someone setting up agent guidance for personal and professional projects,
+**I want** a small shared starting selection with understandable local deltas,
+**so that** I can produce a useful `AGENTS.md` without first learning every
+composition feature.
 
-Acceptance criteria:
-- `mogent init` offers a minimal, legible manifest and explains every field.
-- A personal repo and a professional repo can both start from the shared core
-  and then include or drop individual modules.
-- One command renders a usable document from local or pinned sources.
+Current support:
 
-Scope notes:
-- Personal and professional are divergent audiences; the answer is a shared
-  core plus per-context deltas, not one generic template.
-- "No unexplained concepts" applies to the starter surface, not to the tool's
-  full capability.
+- `mogent init` creates a minimal authored `mogent.build`; `mogent init --plan`
+  creates intent-first `mogent.plan`.
+- `mogent source add`, `source tree`, and `module include` make a selected
+  source and module visible before `mogent build` writes outputs.
+- `mogent sequence --file mogent.plan` produces the inspectable generated build
+  without installing workspace outputs.
 
-### US-2 — Continuous borrowing between personal and professional
+Acceptance status:
 
-**As** a developer working across personal and professional repos, **I want** to
-borrow org-style practice, modify it, and layer on accessibility, style, and
-workflow additions with minimal friction, **so that** improvements flow between
-contexts without manual copy/paste.
+- [x] A minimal native project can select a source and build instructions and
+  skill bundles (`tools/native-stories`: US-1).
+- [ ] A reviewed personal/professional starter pair and its deltas are not yet
+  specified or dogfooded.
+- [ ] “Explains every field” needs a user-facing first-run evaluation, not only
+  command help and [PLAN-FILES.md](PLAN-FILES.md).
 
-Acceptance criteria:
-- Localize a module from a source alias, edit it, and keep provenance to the
-  origin revision.
-- Add local modules alongside borrowed ones and render them together.
-- Pull upstream updates later; conflicts are surfaced rather than clobbered.
-- Friction budget: one command, no manual file moves, diff shown before write.
+### US-2 — Borrow, localize, and review upstream change
 
-Scope notes:
-- Org practice is emulated for now by a second local library; no real org
-  library is required to develop this.
-- Publishing or redistributing org-derived practice needs an explicit
-  authority/licensing boundary before it is treated as shareable.
+**As** a developer working across projects, **I want** to borrow reusable
+practice, make a project-local copy when needed, and review later upstream
+change, **so that** useful improvements do not require unmanaged copy/paste.
 
-### US-3 — Multi-agent prompting (manager)
+Current support:
 
-**As** a manager coordinating guidance for multiple agents or roles, **I want**
-shared org policy plus per-role overlays, **so that** many agents follow the
-same constraints while retaining role-specific instructions.
+- `module localize <source:path>` copies a selected physical input into
+  `.mogent/local` and appends a replacing local include; `--dry-run` previews
+  the operation.
+- `drift` compares the current connected library with saved per-library and
+  per-node build fingerprints, reporting changed, added, and removed modules.
+- Localized inputs are not silently recopied from upstream.
 
-Acceptance criteria:
-- A core instruction layer plus role overlays that may tighten but never relax
-  the core (the wire-lab / grid-examples model).
-- Defined precedence across personal, org, and repo sources.
+Acceptance status:
 
-Scope notes:
-- Runtime multi-agent coordination is out of scope. This story covers
-  multi-agent **prompting** only.
-- This is expected to be the fusion point for a lot of responsibility; the exact
-  boundary is TBD and should be revisited.
+- [x] Localization and upstream-change reporting have executable coverage
+  (`tools/native-stories`: US-2).
+- [ ] A guided reconciliation of a localized module with an upstream revision,
+  including conflict presentation and acceptance, is not implemented.
+- [ ] The one-command/friction-budget claim remains a real-project dogfood
+  question; it is not established by fixture tests.
 
-### US-4 — Adoption into a large existing codebase
+### US-3 — Multi-agent prompting and role overlays
 
-**As** a developer adding Mogent to an existing repo full of inconsistent
-`AGENTS.md`, `CLAUDE.md`, and `.agents/skills/` files, **I want** to capture and
-reconcile that guidance into a manifest and library with provenance, **so that**
-I converge on one source of truth incrementally without a big-bang rewrite.
+**As** a manager coordinating guidance for multiple roles, **I want** shared
+policy plus role-specific overlays, **so that** agents can share constraints
+without receiving identical instructions.
 
-Acceptance criteria:
-- Read-only capture and inventory of root, nested, role-specific, and skill
-  files.
-- Classify every rule by scope and flag duplicates and conflicts.
-- Import into modules with origin revision; `status` / `--dry-run` shows the
-  diff before any write.
-- Adopt one repo and one section at a time; nothing is silently overwritten.
+Current support: ordered includes can compose multiple sources and destinations.
 
-Scope notes:
-- Capture (read-only) is separate from reconcile (writes, which need owner
-  decisions). The hard part is authority when sources disagree, not parsing.
-- `AGENTS.md` and skills are different artifact types and may need separate
-  ingestion models.
-- "Converged" needs a defined target state to be measurable.
+Not implemented: role-overlay modeling, a rule that an overlay may tighten but
+not relax required policy, and defined cross-source precedence. Runtime
+multi-agent coordination is out of scope.
 
----
+### US-4 — Incremental adoption in an existing codebase
+
+**As** a developer introducing Mogent into a repository with existing guidance
+and skills, **I want** to inspect and adopt it incrementally, **so that** a
+single source of truth can emerge without an unsafe rewrite.
+
+Current support:
+
+- `status`, `drift`, `show tree`, and `build --check` inspect managed output
+  state without rewriting it.
+- Builds protect managed outputs against direct drift; generated builds resist
+  hand edits.
+
+Acceptance status:
+
+- [x] Generated-build and output-drift protection have executable coverage
+  (`tools/native-stories`: US-4/US-6).
+- [ ] Read-only capture/inventory of root, nested, role-specific guidance,
+  `CLAUDE.md`, and existing skill trees is not implemented.
+- [ ] Rule classification, duplicate/conflict detection, provenance-preserving
+  import, and incremental adoption are not implemented.
 
 ## Review later
 
-Documented for completeness; not scheduled.
-
 ### US-5 — Library curator
 
-**As** a library maintainer (e.g. a CIWG/org curator), **I want** to receive
-proposals, review non-overlapping merges, publish revisions, and deprecate
-modules with provenance intact, **so that** the shared library stays coherent as
-many repos contribute.
+**As** a library maintainer, **I want** to review proposals, publish revisions,
+and deprecate modules with provenance, **so that** shared content remains
+coherent as repositories contribute.
+
+Not scheduled. Source browsing and deterministic source fingerprints are useful
+prerequisites; proposal/review/publish/deprecation workflows are not implemented.
+The CIWG/PromiseGrid application is tracked separately in
+[user-stories-ciwg.md](user-stories-ciwg.md).
 
 ### US-6 — CI drift gate
 
-**As** a CI automation maintainer, **I want** the build to fail when a checked-in
-`AGENTS.md` no longer reproduces from its manifest, **so that** generated output
-is never hand-edited and drift is caught at the PR.
+**As** a CI maintainer, **I want** a checked-in output to fail verification when
+it no longer reproduces from its project definition, **so that** hand edits and
+unreviewed source changes are caught in review.
 
-### US-7 — Runtime retrieval and token cost
+Current support: `mogent build --check` verifies all managed output bytes,
+modes, and directory layout without writing. `mogent drift --all --diff` gives a
+human-readable companion report.
 
-**As** an agent operating in a repository, **I want** to discover the right
-module or skill by tag on demand without loading everything, **so that** context
-stays small and relevant.
+Acceptance status:
+
+- [x] The check behavior is covered by `tools/native-stories`: US-6.
+- [ ] A documented CI-provider example and a real CI run remain to be dogfooded.
+
+### US-7 — Retrieval and token cost
+
+**As** an agent operating in a repository, **I want** to find relevant modules
+or skills without loading every library payload, **so that** context remains
+small and relevant.
+
+Current support: `source tree`, `source search`, tag predicates, and
+`source content` provide developer-directed discovery. Runtime retrieval,
+context-budget measurement, and automatic on-demand loading are not implemented.
 
 ### US-8 — Authority auditor
 
-**As** an organization reviewer, **I want** to prove that no repository relaxed a
-required org rule and to see which policy revision each agent acted under, **so
-that** shared policy is enforceable and auditable.
+**As** an organization reviewer, **I want** to determine which policy revision a
+project used and whether required policy was relaxed, **so that** policy can be
+audited rather than merely copied.
+
+Current support: generated builds record resolved inputs, and output state stores
+upstream fingerprints. Required-policy declarations, non-relaxation analysis,
+and organization-level audit reports are not implemented.
